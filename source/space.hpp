@@ -1,7 +1,9 @@
-#ifndef _SPACE_HPP
-#define _SPACE_HPP
+#ifndef CE_SPACE_HPP
+#define CE_SPACE_HPP
 
 #include "definitions.hpp"
+
+namespace CE {
 
 struct Dimension {
 	Nat16 width;
@@ -13,4 +15,6 @@ struct Location {
 	Nat16 column;
 };
 
-#endif // _SPACE_HPP
+}
+
+#endif // CE_SPACE_HPP
