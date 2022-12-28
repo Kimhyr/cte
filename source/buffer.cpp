@@ -6,11 +6,17 @@ Buffer::Segment::Segment(Segment *prevSegment)
         : edited(false), dataSize(0),
           nextSegment(nil), prevSegment(prevSegment) {}
 
-Buffer::Segment::Segment(Sym datum, Segment *nextSegment,
-                         Segment *prevSegment)
+Buffer::Segment::Segment(Sym datum)
         : edited(false), dataSize(1),
-          nextSegment(nextSegment), prevSegment(prevSegment) {
+          nextSegment(nil), prevSegment(nil) {
         *this->data = datum;
+}
+
+Void Buffer::Segment::insertAfter(Segment *segment) {
+        segment->prevSegment = this;
+        segment->nextSegment = this->nextSegment; 
+        this->nextSegment->prevSegment = segment;
+        this->nextSegment = segment;
 }
 
 Buffer::Cursor::Cursor(Segment *segment)
@@ -34,14 +40,18 @@ Buffer::~Buffer() {
 
 Void Buffer::insert(Sym datum) {
         if (datum == '\n') {
-                auto segment = new Segment(datum, this->cursor.segment->nextSegment, 
-                                           this->cursor.segment);
-                this->cursor.segment->nextSegment->prevSegment = segment;
-                this->cursor.segment->nextSegment = segment;
+                this->cursor.segment->insertAfter(new Segment(datum));
+                this->cursor.segment = this->cursor.segment->nextSegment;
                 return;
         }
         switch (this->cursor.segment->data[this->cursor.segmentDataIndex]) {
         case 0:
+                if (this->cursor.segment->dataSize + 1 > Buffer::Segment::DATA_SPACE) {
+                        this->cursor.segment->insertAfter(
+                                        new Segment(this->cursor.segment->data[
+                                                this->cursor.segmentDataIndex]));
+                }
+                this->cursor.segment->data[this->cursor.segmentDataIndex] = datum;
                 break;
         case '\n':
                 break;

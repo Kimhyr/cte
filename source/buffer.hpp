@@ -29,8 +29,10 @@ public:
 
         public:
                 Segment(Segment *prevSegment = nil);
-                Segment(Sym datum, Segment *prevSegment,
-                        Segment *nextSegment);
+                Segment(Sym datum);
+        
+        public:
+                Void insertAfter(Segment *segment);
         };
 
         struct Cursor {
