@@ -10,20 +10,20 @@ namespace CE {
 class Buffer {
 public:
         enum class Flag : Nat8 {
-                WRITEABLE = 'w',
-                SAVEABLE,
+                WRITEABLE = 0x01,
+                SAVEABLE  = 0x02,
         };
 
         struct Segment {
         public:
-                enum {
-                        DATA_SPACE = 80
-                };
+                static constexpr
+                const Nat8 DATA_SPACE = 0;
 
         public:
                 Bool edited;
                 Sym data[DATA_SPACE];
                 Nat8 dataSize;
+                Nat8 newLineIndex;
                 Segment *nextSegment;
                 Segment *prevSegment;
 
@@ -50,9 +50,12 @@ public:
 
         ~Buffer();
 
+public: // Operations
+        Void write(Sym datum);
+
+        Void erase();
+
 public:
-        Void insert(Sym datum);
-        
         Void printData();
 
 private:
@@ -64,8 +67,17 @@ private:
         Cursor cursor;
 
 private:
-        inline Void loadSourceFile();
-        inline FILE *openSourceFile();
+        inline
+        Void loadSource();
+        
+        inline
+        FILE *openFile();
+
+        inline
+        Void insertSegment();
+
+        inline
+        Void deleteSegment();
 };
 
 }

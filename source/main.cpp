@@ -1,6 +1,8 @@
 #include "buffer.hpp"
 #include "debug/log.hpp"
 
+#include <stdio.h>
+
 using namespace CE;
 
 Void buffer_T() {
@@ -15,6 +17,8 @@ Void buffer_T() {
 
 Int main() {
 	// LOG("Hello, World!");
-	buffer_T();
-	return 0;
+	// buffer_T();
+	for (Int i = 0; i < 10;)
+                printf("%i\n", i++);
+        return 0;
 }
