@@ -18,7 +18,6 @@ public:
         public:
                 static constexpr
                 const Nat8 SPACE = 80;
-
         public:
                 Bool edited;
                 Sym data[SPACE];
@@ -26,13 +25,11 @@ public:
                 Int8 newLineIndex;
                 Segment *next;
                 Segment *prev;
-
         public:
                 Segment();
                 Segment(Segment *prev);
                 Segment(Sym datum, Segment *prev);
                 Segment(Sym *data, Segment *prev);
-        
         public:
                 Void insert(Segment *segment);
         };
@@ -42,7 +39,6 @@ public:
                 Location location;
                 Segment *segment; // The segment that the cursor is on.
                 Nat8 dataIndex;
-
         public:
                 Cursor(Segment *segment);
 
@@ -60,7 +56,6 @@ public: // Operations
 
 public:
         Void printData();
-
 private:
         Dimension dimension;
         Flag flags;
@@ -68,7 +63,6 @@ private:
         Segment *first;
         Segment *last;
         Cursor cursor;
-
 private:
         inline
         Void loadSource();

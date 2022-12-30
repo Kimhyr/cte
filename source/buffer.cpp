@@ -43,24 +43,27 @@ Buffer::Cursor::Cursor(Segment *segment)
 Void Buffer::Cursor::moveRight() {
         if (!this->segment->size)
                 throw Bool(0);
-        ++this->location.column;
         if (this->dataIndex < this->segment->size) {
                 ++this->dataIndex;
-                return;
+                goto Epilogue;
         }
-        if (this->dataIndex + 1 > this->segment->newLineIndex)
+        if (this->dataIndex + 1 > this->segment->newLineIndex) {
                 ++this->location.row;
+                this->location.column = 0;
+        }
         if (this->segment->size < Segment::SPACE) {
                 ++this->dataIndex;
-                return;
+                goto Epilogue;
         }
         this->segment->insert(this->segment);
         this->segment = this->segment->next;
         this->dataIndex = 0;
+Epilogue:
+        ++this->location.column;
 }
 
 Void Buffer::Cursor::moveLeft() {
-        $task("Implement.");
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,16 +76,14 @@ Buffer::Buffer(Flag flags, const Sym *sourceFilePath)
 }
 
 Buffer::~Buffer() {
-        for (Segment *segment; this->first;
-             this->first = segment) {
+        for (Segment *segment; this->first; this->first = segment) {
                 segment = this->first;
                 delete this->first;
         }
 }
 
 Void Buffer::printData() {
-        for (Segment *segment = this->first; segment;
-             segment = segment->next)
+        for (Segment *segment = this->first; segment; segment = segment->next)
                 if (fputs(segment->data, stdout) == -1)
                         throw Bool(0);
 }
