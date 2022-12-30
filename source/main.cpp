@@ -1,5 +1,4 @@
 #include "buffer.hpp"
-#include "debug/log.hpp"
 
 #include <stdio.h>
 

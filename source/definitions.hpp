@@ -12,6 +12,7 @@ using Bool = bool;
 using Sym = char;
 
 using Int = int;
+using Int8 = signed char;
 
 using Nat = unsigned int;
 using Nat8 = unsigned char;

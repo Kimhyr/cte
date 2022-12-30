@@ -1,79 +1,112 @@
 #include "buffer.hpp"
 
+#include "macros.hpp"
+
 namespace CE {
 
-Buffer::Segment::Segment(Segment *prevSegment)
-        : edited(false), dataSize(0),
-          nextSegment(nil), prevSegment(prevSegment) {}
+///////////////////////////////////////////////////////////////////////////////
+// Segment
 
-Buffer::Segment::Segment(Sym datum)
-        : edited(false), dataSize(1),
-          nextSegment(nil), prevSegment(nil) {
+Buffer::Segment::Segment(Segment *prev)
+        : edited(false), size(0),
+          next(nil), prev(prev) {}
+
+Buffer::Segment::Segment(Sym datum, Segment *prev)
+        : edited(true), size(1),
+          next(nil), prev(prev) {
         *this->data = datum;
 }
 
-Void Buffer::Segment::insertAfter(Segment *segment) {
-        segment->prevSegment = this;
-        segment->nextSegment = this->nextSegment; 
-        this->nextSegment->prevSegment = segment;
-        this->nextSegment = segment;
+Buffer::Segment::Segment(Sym *data, Segment *prev)
+        : edited(true), next(nil),
+          prev(prev) {
+        for (this->size = 0; data[this->size] && this->size <= SPACE;
+             ++this->size)
+                this->data[this->size] = data[this->size];
 }
+
+Void Buffer::Segment::insert(Segment *segment) {
+        segment->prev = this;
+        segment->next = this->next; 
+        this->next->prev = segment;
+        this->next = segment;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Cursor
 
 Buffer::Cursor::Cursor(Segment *segment)
         : location({.row = 1, .column = 1}),
-          segment(segment), segmentDataIndex(0) {
+          segment(segment), dataIndex(0) {
 }
+
+Void Buffer::Cursor::moveRight() {
+        if (!this->segment->size)
+                throw Bool(0);
+        ++this->location.column;
+        if (this->dataIndex < this->segment->size) {
+                ++this->dataIndex;
+                return;
+        }
+        if (this->dataIndex + 1 > this->segment->newLineIndex)
+                ++this->location.row;
+        if (this->segment->size < Segment::SPACE) {
+                ++this->dataIndex;
+                return;
+        }
+        this->segment->insert(this->segment);
+        this->segment = this->segment->next;
+        this->dataIndex = 0;
+}
+
+Void Buffer::Cursor::moveLeft() {
+        $task("Implement.");
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Buffer
 
 Buffer::Buffer(Flag flags, const Sym *sourceFilePath)
         : flags(flags), sourceFilePath(sourceFilePath),
-          firstSegment(new Segment), cursor(this->firstSegment) {
+          first(new Segment), cursor(this->first) {
         this->loadSource();
 }
 
 Buffer::~Buffer() {
-        for (Segment *segment; this->firstSegment;
-             this->firstSegment = segment) {
-                segment = this->firstSegment;
-                delete this->firstSegment;
+        for (Segment *segment; this->first;
+             this->first = segment) {
+                segment = this->first;
+                delete this->first;
         }
 }
 
-Void Buffer::write(Sym datum) {
-        Segment *segment = this->cursor.segment;
-        if (segment->dataSize + 1 > Buffer::Segment::DATA_SPACE)
-                this->insertSegment();
-        segment->data[this->cursor.segmentDataIndex++] = datum;
-}
-
-Void Buffer::erase() {
-        if (this->cursor.segment->dataSize - 1 < 0)
-                this->deleteSegment();
-}
-
 Void Buffer::printData() {
-        for (Segment *segment = this->firstSegment; segment;
-             segment = segment->nextSegment)
+        for (Segment *segment = this->first; segment;
+             segment = segment->next)
                 if (fputs(segment->data, stdout) == -1)
                         throw Bool(0);
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// Utilities
+
 Void Buffer::loadSource() {
         FILE *file = this->openFile();
         Segment *segment;
-        for (segment = this->firstSegment;;
-             segment = segment->nextSegment = new Segment(segment)) {
+        for (segment = this->first;;
+             segment = segment->next = new Segment(segment)) {
                 for (Int datum = fgetc(file);
-                     segment->dataSize < Segment::DATA_SPACE;
+                     segment->size < Segment::SPACE;
                      datum = fgetc(file)) {
                         if (datum == EOF) // https://www.your-mom.com
                                 goto Epilogue;
-                        segment->data[segment->dataSize++] = datum;
+                        segment->data[segment->size++] = datum;
                 }
         }
 
 Epilogue:
-        segment->data[segment->dataSize - 1]  = 0;
-        this->lastSegment = segment;
+        segment->data[segment->size - 1]  = 0;
+        this->last = segment;
         if (fclose(file) == -1)
                 throw Bool(0);
 }
@@ -89,19 +122,14 @@ FILE *Buffer::openFile() {
 }
 
 Void Buffer::insertSegment() {
-        Segment **segment = &this->cursor.segment;
-        (*segment)->insertAfter(new Segment((*segment)->data[
-                this->cursor.segmentDataIndex]));
-        *segment = (*segment)->nextSegment; // Please, Optimizer, optimize
-                                            // this.
-        this->cursor.segmentDataIndex = 0;
+        $task("Unimplemented.");
 }
 
 Void Buffer::deleteSegment() {
         Segment *segment = this->cursor.segment;
-        this->cursor.segment = segment->nextSegment;
+        this->cursor.segment = segment->next;
         delete segment;
-        this->cursor.segmentDataIndex = this->cursor.segment->dataSize - 1;
+        this->cursor.dataIndex = this->cursor.segment->size - 1;
 }
 
 }

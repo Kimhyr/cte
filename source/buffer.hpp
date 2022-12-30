@@ -17,32 +17,38 @@ public:
         struct Segment {
         public:
                 static constexpr
-                const Nat8 DATA_SPACE = 0;
+                const Nat8 SPACE = 80;
 
         public:
                 Bool edited;
-                Sym data[DATA_SPACE];
-                Nat8 dataSize;
-                Nat8 newLineIndex;
-                Segment *nextSegment;
-                Segment *prevSegment;
+                Sym data[SPACE];
+                Nat8 size;
+                Int8 newLineIndex;
+                Segment *next;
+                Segment *prev;
 
         public:
-                Segment(Segment *prevSegment = nil);
-                Segment(Sym datum);
+                Segment();
+                Segment(Segment *prev);
+                Segment(Sym datum, Segment *prev);
+                Segment(Sym *data, Segment *prev);
         
         public:
-                Void insertAfter(Segment *segment);
+                Void insert(Segment *segment);
         };
 
         struct Cursor {
         public:
                 Location location;
                 Segment *segment; // The segment that the cursor is on.
-                Nat8 segmentDataIndex;
+                Nat8 dataIndex;
 
         public:
                 Cursor(Segment *segment);
+
+                Void moveRight();
+                
+                Void moveLeft();
         };
 
 public:
@@ -51,9 +57,6 @@ public:
         ~Buffer();
 
 public: // Operations
-        Void write(Sym datum);
-
-        Void erase();
 
 public:
         Void printData();
@@ -62,8 +65,8 @@ private:
         Dimension dimension;
         Flag flags;
         const Sym *sourceFilePath;
-        Segment *firstSegment;
-        Segment *lastSegment;
+        Segment *first;
+        Segment *last;
         Cursor cursor;
 
 private:
