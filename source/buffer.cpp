@@ -4,22 +4,18 @@
 
 namespace CE {
 
-///////////////////////////////////////////////////////////////////////////////
-// Segment
-
 Buffer::Segment::Segment(Segment *prev)
-        : edited(false), size(0),
-          next(nil), prev(prev) {}
+        : edited(false), size(0), newLineIndex(-1), next(nil),
+          prev(prev) {}
 
 Buffer::Segment::Segment(Sym datum, Segment *prev)
-        : edited(true), size(1),
-          next(nil), prev(prev) {
+        : edited(true), size(1), newLineIndex(-1), next(nil),
+          prev(prev) {
         *this->data = datum;
 }
 
 Buffer::Segment::Segment(Sym *data, Segment *prev)
-        : edited(true), next(nil),
-          prev(prev) {
+        : edited(true), newLineIndex(-1), next(nil), prev(prev) {
         for (this->size = 0; data[this->size] && this->size <= SPACE;
              ++this->size)
                 this->data[this->size] = data[this->size];
@@ -32,46 +28,29 @@ Void Buffer::Segment::insert(Segment *segment) {
         this->next = segment;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Cursor
-
 Buffer::Cursor::Cursor(Segment *segment)
-        : location({.row = 1, .column = 1}),
-          segment(segment), dataIndex(0) {
+        : location({.row = 1, .column = 1}), segment(segment), dataIndex(0) {
+}
+
+Void Buffer::Cursor::moveUp() {
+        $task("");
+}
+
+Void Buffer::Cursor::moveDown() {
+        $task("");
 }
 
 Void Buffer::Cursor::moveRight() {
-        if (!this->segment->size)
-                throw Bool(0);
-        if (this->dataIndex < this->segment->size) {
-                ++this->dataIndex;
-                goto Epilogue;
-        }
-        if (this->dataIndex + 1 > this->segment->newLineIndex) {
-                ++this->location.row;
-                this->location.column = 0;
-        }
-        if (this->segment->size < Segment::SPACE) {
-                ++this->dataIndex;
-                goto Epilogue;
-        }
-        this->segment->insert(this->segment);
-        this->segment = this->segment->next;
-        this->dataIndex = 0;
-Epilogue:
-        ++this->location.column;
+        $task("");
 }
 
 Void Buffer::Cursor::moveLeft() {
-
+        $task("");
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Buffer
-
 Buffer::Buffer(Flag flags, const Sym *sourceFilePath)
-        : flags(flags), sourceFilePath(sourceFilePath),
-          first(new Segment), cursor(this->first) {
+        : flags(flags), sourceFilePath(sourceFilePath), first(new Segment),
+          cursor(this->first) {
         this->loadSource();
 }
 
@@ -87,9 +66,6 @@ Void Buffer::printData() {
                 if (fputs(segment->data, stdout) == -1)
                         throw Bool(0);
 }
-
-///////////////////////////////////////////////////////////////////////////////
-// Utilities
 
 Void Buffer::loadSource() {
         FILE *file = this->openFile();

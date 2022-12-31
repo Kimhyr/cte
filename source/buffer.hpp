@@ -22,7 +22,7 @@ public:
                 Bool edited;
                 Sym data[SPACE];
                 Nat8 size;
-                Int8 newLineIndex;
+                Nat8 newLineIndex;
                 Segment *next;
                 Segment *prev;
         public:
@@ -41,6 +41,10 @@ public:
                 Nat8 dataIndex;
         public:
                 Cursor(Segment *segment);
+
+                Void moveUp();
+
+                Void moveDown();
 
                 Void moveRight();
                 
