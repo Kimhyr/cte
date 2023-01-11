@@ -1,5 +1,0 @@
-namespace CE {
-
-struct Style {};
-
-}

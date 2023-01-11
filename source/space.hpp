@@ -1,20 +1,20 @@
-#ifndef CE_SPACE_HPP
-#define CE_SPACE_HPP
+#ifndef CTE_SPACE_HPP
+#define CTE_SPACE_HPP
 
 #include "definitions.hpp"
 
-namespace CE {
+namespace CTE {
 
 struct Dimension {
 	Nat16 width;
 	Nat16 height;
 };
 
-struct Location {
+struct Coordinate {
 	Nat16 row;
 	Nat16 column;
 };
 
 }
 
-#endif // CE_SPACE_HPP
+#endif // CTEE_SPACE_HPP

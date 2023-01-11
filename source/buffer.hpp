@@ -1,11 +1,11 @@
-#ifndef CE_BUFFER_HPP
-#define CE_BUFFER_HPP
+#ifndef CTE_BUFFER_HPP
+#define CTE_BUFFER_HPP
 
 #include "space.hpp"
 
 #include <stdio.h>
 
-namespace CE {
+namespace CTE {
 
 class Buffer {
 public:
@@ -36,7 +36,7 @@ public:
 
         struct Cursor {
         public:
-                Location location;
+                Coordinate location;
                 Segment *segment; // The segment that the cursor is on.
                 Nat8 dataIndex;
         public:
@@ -83,4 +83,4 @@ private:
 
 }
 
- #endif // CE_BUFFER_HPP
+ #endif // CTE_BUFFER_HPP

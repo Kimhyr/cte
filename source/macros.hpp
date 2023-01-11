@@ -1,19 +1,32 @@
-#ifndef CE_MACROS_HPP
-#define CE_MACROS_HPP
+#ifndef CTE_MACROS_HPP
+#define CTE_MACROS_HPP
 
 #include <stdlib.h>
 
-#define $log(MESSAGE)                                                           \
+#ifdef CTE_USE_MACRO_NAMESPACE
+#define CTE_log$(MESSAGE)                                                      \
         printf("[\e[1;32mLOG\e[0m] " __FILE__ ":%s:%i"                         \
                "\n\t" MESSAGE "\n",                                            \
                __FUNCTION__, __LINE__)
-
-#define $task(DESCRIPTION)                                                      \
+#define CTE_task$(DESCRIPTION)                                                 \
         do {                                                                   \
                 printf("[\e[1;33mTASK\e[0m] " __FILE__ ":%s:%i"                \
                        "\n\t" DESCRIPTION "\n",                                \
                        __FUNCTION__, __LINE__);                                \
                 exit(1);                                                       \
         } while (0)
+#else // CTE_USE_MACRO_NAMESPACE
+#define log$(MESSAGE)                                                          \
+        printf("[\e[1;32mLOG\e[0m] " __FILE__ ":%s:%i"                         \
+               "\n\t" MESSAGE "\n",                                            \
+               __FUNCTION__, __LINE__)
+#define task$(DESCRIPTION)                                                     \
+        do {                                                                   \
+                printf("[\e[1;33mTASK\e[0m] " __FILE__ ":%s:%i"                \
+                       "\n\t" DESCRIPTION "\n",                                \
+                       __FUNCTION__, __LINE__);                                \
+                exit(1);                                                       \
+        } while (0)
+#endif // CTE_USE_MACRO_NAMESPACE
 
-#endif // CE_MACROS_HPP
+#endif // CTE_MACROS_HPP

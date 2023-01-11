@@ -2,7 +2,12 @@
 
 #include "macros.hpp"
 
-namespace CE {
+// NOTES
+//         ?segment.prev -> SOT
+//         ?segment.next -> EOT
+//
+
+namespace CTE {
 
 Buffer::Segment::Segment(Segment *prev)
         : edited(false), size(0), newLineIndex(-1), next(nil),
@@ -33,19 +38,49 @@ Buffer::Cursor::Cursor(Segment *segment)
 }
 
 Void Buffer::Cursor::moveUp() {
-        $task("");
+        task$("");     
 }
 
 Void Buffer::Cursor::moveDown() {
-        $task("");
+        task$("");
 }
 
 Void Buffer::Cursor::moveRight() {
-        $task("");
+        if (this->dataIndex + 1 == this->segment->size) {
+                if (this->segment->next) {
+                        this->segment = this->segment->next;
+                        this->dataIndex = 0;
+                } else task$("Inplace: throw Error(\"Could notexecute"
+                             "`Cursor::moveRight` because `Cursor` is on EOT.\""
+                             ");");
+        } else ++this->dataIndex;
+        if (this->dataIndex == this->segment->newLineIndex) {
+                ++this->location.row; 
+                this->location.column = 0;
+        } else ++this->location.column;
 }
 
+
+
 Void Buffer::Cursor::moveLeft() {
-        $task("");
+        // TODO: Check if there is a more efficient way of handling new lines
+        //       without the `newLine` boolean.
+        Bool newLine = false;
+        if (this->dataIndex == this->segment->newLineIndex)
+                newLine = true;
+        if (this->dataIndex - 1 == -1) {
+                if (this->segment->prev) {
+                        this->segment = this->segment->prev;
+                        this->dataIndex = 0;
+                } else task$("Inplace: throw Error(\"Could notexecute"
+                             "`Cursor::moveLeft` because `Cursor` is on SOT.\""
+                             ");");
+        } else --this->dataIndex;
+        if (newLine) {
+                --this->location.row;
+                this->location.column = this->dataIndex + 1;
+        } else --this->location.column;
+        
 }
 
 Buffer::Buffer(Flag flags, const Sym *sourceFilePath)
@@ -99,7 +134,7 @@ FILE *Buffer::openFile() {
 }
 
 Void Buffer::insertSegment() {
-        $task("Unimplemented.");
+        task$("Unimplemented.");
 }
 
 Void Buffer::deleteSegment() {

@@ -1,9 +1,9 @@
-#ifndef CE_DEFINITIONS_HPP
-#define CE_DEFINITIONS_HPP
+#ifndef CTE_DEFINITIONS_HPP
+#define CTE_DEFINITIONS_HPP
 
 #define nil nullptr
 
-namespace CE {
+namespace CTE {
 
 using Void = void;
 
@@ -32,4 +32,4 @@ inline constexpr Type_T operator~(Type_T a) {
 
 }
 
-#endif // CE_DEFINITIONS_HPP
+#endif // CTE_DEFINITIONS_HPP

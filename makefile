@@ -1,4 +1,4 @@
-NAME=text_buffer
+NAME=cte
 
 # Directories
 SRCD=./source
