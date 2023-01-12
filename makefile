@@ -4,7 +4,7 @@ NAME=cte
 SRCD=./source
 BLDD=./build
 OBJD=$(BLDD)/objects
-DIRS=.
+DIRS=. utilities
 
 # Files
 SRCS=$(foreach D,$(DIRS),$(wildcard $(SRCD)/$(D)/*.cpp))
