@@ -1,7 +1,7 @@
-#ifndef CTE_SPACE_HPP
-#define CTE_SPACE_HPP
+#ifndef CTE_SPACE_H
+#define CTE_SPACE_H
 
-#include "definitions.hpp"
+#include "definitions.h"
 
 namespace CTE {
 
@@ -17,4 +17,4 @@ struct Coordinate {
 
 }
 
-#endif // CTEE_SPACE_HPP
+#endif // CTEE_SPACE_H

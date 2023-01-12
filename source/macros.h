@@ -1,5 +1,5 @@
-#ifndef CTE_MACROS_HPP
-#define CTE_MACROS_HPP
+#ifndef CTE_MACROS_H
+#define CTE_MACROS_H
 
 #include <stdlib.h>
 
@@ -29,4 +29,4 @@
         } while (0)
 #endif // CTE_USE_MACRO_NAMESPACE
 
-#endif // CTE_MACROS_HPP
+#endif // CTE_MACROS_H

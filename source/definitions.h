@@ -1,5 +1,5 @@
-#ifndef CTE_DEFINITIONS_HPP
-#define CTE_DEFINITIONS_HPP
+#ifndef CTE_DEFINITIONS_H
+#define CTE_DEFINITIONS_H
 
 #define nil nullptr
 
@@ -32,4 +32,4 @@ inline constexpr Type_T operator~(Type_T a) {
 
 }
 
-#endif // CTE_DEFINITIONS_HPP
+#endif // CTE_DEFINITIONS_H

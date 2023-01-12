@@ -1,11 +1,14 @@
-#ifndef CTE_BUFFER_HPP
-#define CTE_BUFFER_HPP
-
-#include "space.hpp"
+#ifndef CTE_BUFFER_H
+#define CTE_BUFFER_H
 
 #include <stdio.h>
 
+#include "utilities/dynamic.h"
+#include "space.h"
+
 namespace CTE {
+
+using namespace Utilities;
 
 class Buffer {
 public:
@@ -23,7 +26,7 @@ public:
                 Bool edited;
                 Sym data[SPACE];
                 Nat8 size;
-                Nat8 newLineIndex;
+                Dynamic<Nat8> newLines;
                 Segment *next;
                 Segment *prev;
 
@@ -87,4 +90,4 @@ private:
 
 }
 
- #endif // CTE_BUFFER_HPP
+ #endif // CTE_BUFFER_H
