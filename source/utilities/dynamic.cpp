@@ -1,4 +1,4 @@
-include "dynamic.h"
+#include "dynamic.h"
 
 namespace CTE::Utilities {
 
@@ -27,7 +27,7 @@ Void Dynamic<Type_T>::pop() {
 }
 
 template<typename Type_T>
-Bool Dynamic<Type_T>::exists(Type_T query) {
+Bool Dynamic<Type_T>::exists(Type_T query) const {
 	for (Type_T *it = this->data; it != this->dataBack; ++it)
 		if (*it == query)
 			return true;
