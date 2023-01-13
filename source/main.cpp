@@ -1,16 +1,16 @@
-#include "buffer.hpp"
+#include "buffer.h"
 
 #include <stdio.h>
 
-using namespace CE;
+using namespace CTE;
 
 Void buffer_T() {
 	Buffer::Flag flags = Buffer::Flag::SAVEABLE | Buffer::Flag::WRITEABLE;
 	try {
 		Buffer buffer(flags, "/home/k/projects/ce/tests/test.txt");
 		buffer.printData();
-	} catch (Int e) {
-		printf("%i\n", e);
+	} catch (Bool) {
+		puts("FAILURE");
 	}
 }
 

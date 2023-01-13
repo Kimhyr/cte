@@ -1,5 +1,7 @@
 #include "dynamic.h"
 
+#include "../error.h"
+
 namespace CTE::Utilities {
 
 template<typename Type_T>
@@ -22,7 +24,7 @@ Void Dynamic<Type_T>::put(Type_T datum) {
 template<typename Type_T>
 Void Dynamic<Type_T>::pop() {
 	if (this->data == this->back)
-		return;
+		throw CTE::Error::OUT_OF_RANGE;
 	--this->back;
 }
 

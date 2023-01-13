@@ -2,6 +2,10 @@
 #define CTE_DEFINITIONS_H
 
 #define nil nullptr
+#define property inline constexpr auto
+#define function auto 
+#define constant static constexpr auto
+#define constnox const noexcept 
 
 namespace CTE {
 
